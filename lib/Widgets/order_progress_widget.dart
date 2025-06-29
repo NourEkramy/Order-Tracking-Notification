@@ -42,7 +42,7 @@ class _OrderProgressWidgetState extends State<OrderProgressWidget> {
           child: OrderTracker(
             key: ValueKey(status),
             status: status,
-            activeColor: Color(0xedff4f5a),
+            activeColor: Color(0xec007aff),
             inActiveColor: Colors.grey[400],
             orderTitleAndDateList: orderedList,
             shippedTitleAndDateList: shippedList,
@@ -60,26 +60,24 @@ class _OrderProgressWidgetState extends State<OrderProgressWidget> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xedff4f5a),
-                      foregroundColor: Colors.black,
+                      backgroundColor: Color(0xec007aff),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () => updateStatus(Status.order),
-                    child: const Text("Set Ordered"),
+                    child: const Text("Set Ordered",style: TextStyle(color: Colors.white),),
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xedff4f5a),
-                      foregroundColor: Colors.black,
+                      backgroundColor: Color(0xec007aff),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () => updateStatus(Status.shipped),
-                    child: const Text("Set Shipped"),
+                    child: const Text("Set Shipped",style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
@@ -88,27 +86,25 @@ class _OrderProgressWidgetState extends State<OrderProgressWidget> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xedff4f5a),
-                      foregroundColor: Colors.black,
+                      backgroundColor: Color(0xec007aff),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () => updateStatus(Status.outOfDelivery),
-                    child: const Text("Set Out of delivery"),
+                    child: const Text("Set Out of delivery",style: TextStyle(color: Colors.white)),
                   ),
 
                   SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xedff4f5a),
-                      foregroundColor: Colors.black,
+                      backgroundColor: Color(0xec007aff),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () => updateStatus(Status.delivered),
-                    child: const Text("Set Delivered"),
+                    child: const Text("Set Delivered",style: TextStyle(color: Colors.white)),
                   ),
 
                 ],

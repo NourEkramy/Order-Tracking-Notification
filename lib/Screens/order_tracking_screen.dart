@@ -11,21 +11,18 @@ class OrderTrackingScreen extends StatefulWidget {
 }
 
 class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink.shade50,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xedff4f5a),
+        backgroundColor: Color(0xec007aff),
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
-        title: const Text('Track Order', style: TextStyle(color: Colors.black)),
+        leading: const BackButton(color: Colors.white),
+        title: const Text('Track Order', style: TextStyle(color: Colors.white, fontSize: 30)),
         centerTitle: true,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10)
-          )
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
         ),
       ),
       body: SingleChildScrollView(
@@ -34,12 +31,10 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
           children: [
             const OrderCardWidget(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.023),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 12,),
               child: Image.asset(
-                'assets/images/3333449.png',
-                width: double.infinity,
-                fit: BoxFit.cover,
+                'assets/images/take-away-concept-illustration.png',
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.025),
