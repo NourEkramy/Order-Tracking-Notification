@@ -1,119 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:order_tracker/order_tracker.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+
+enum OrderStatus { pending, confirmed, shipped, delivered }
 
 class OrderProgressWidget extends StatefulWidget {
-  final Status status;
+  final OrderStatus status;
 
   const OrderProgressWidget({super.key, required this.status});
 
   @override
-  _OrderProgressWidgetState createState() => _OrderProgressWidgetState();
+  State<OrderProgressWidget> createState() => _OrderProgressWidgetState();
 }
 
 class _OrderProgressWidgetState extends State<OrderProgressWidget> {
-  late Status status;
-
-  @override
-  void initState() {
-    super.initState();
-    status = widget.status; // Initialize from passed status
-  }
-
-  void updateStatus(Status newStatus) {
-    setState(() {
-      status = newStatus;
-    });
+  Color _getColor(OrderStatus current) {
+    if (widget.status.index >= current.index) {
+      return Color(0xec007aff);
+    } else {
+      return Colors.grey;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<TextDto> orderedList = [TextDto("Order pending", "")];
+    return Material(
+      color: Colors.white, // This ensures no inherited background
+      child: Column(
+        children: [
+          _buildTile("Pending", OrderStatus.pending),
+          _buildTile("Confirmed", OrderStatus.confirmed),
+          _buildTile("Shipped", OrderStatus.shipped),
+          _buildTile("Delivered", OrderStatus.delivered, isLast: true),
+        ],
+      ),
+    );
+  }
 
-    final List<TextDto> shippedList = [TextDto("Order confirmed", "")];
+  TimelineTile _buildTile(
+    String label,
+    OrderStatus step, {
+    bool isLast = false,
+  }) {
+    final currentIndex = widget.status.index;
+    final stepIndex = step.index;
 
-    final List<TextDto> outForDeliveryList = [TextDto("Order shipped", "")];
+    final beforeLineColor = stepIndex == 0
+        ? Colors
+              .transparent // no before line for first
+        : (stepIndex <= currentIndex ? const Color(0xec007aff) : Colors.grey);
 
-    final List<TextDto> deliveredList = [TextDto("Order delivered", "")];
+    final afterLineColor = stepIndex < currentIndex
+        ? const Color(0xec007aff)
+        : Colors.grey;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          child: OrderTracker(
-            key: ValueKey(status),
-            status: status,
-            activeColor: Color(0xec007aff),
-            inActiveColor: Colors.grey[400],
-            orderTitleAndDateList: orderedList,
-            shippedTitleAndDateList: shippedList,
-            outOfDeliveryTitleAndDateList: outForDeliveryList,
-            deliveredTitleAndDateList: deliveredList,
-          ),
-        ),
-        // Example buttons to test status change
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xec007aff),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () => updateStatus(Status.order),
-                    child: const Text("Set Ordered",style: TextStyle(color: Colors.white),),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xec007aff),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () => updateStatus(Status.shipped),
-                    child: const Text("Set Shipped",style: TextStyle(color: Colors.white)),
-                  ),
-                ],
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-              Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xec007aff),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () => updateStatus(Status.outOfDelivery),
-                    child: const Text("Set Out of delivery",style: TextStyle(color: Colors.white)),
-                  ),
-
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xec007aff),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () => updateStatus(Status.delivered),
-                    child: const Text("Set Delivered",style: TextStyle(color: Colors.white)),
-                  ),
-
-                ],
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-            ],
-          ),
-        ),
-      ],
+    return TimelineTile(
+      isFirst: step == OrderStatus.pending,
+      isLast: isLast,
+      indicatorStyle: IndicatorStyle(width: 20, color: _getColor(step)),
+      beforeLineStyle: LineStyle(color: beforeLineColor, thickness: 3),
+      afterLineStyle: LineStyle(color: afterLineColor, thickness: 3),
+      endChild: Container(
+        height: 70,
+        color: Colors.white,
+        child: Center(child: Text(label, style: const TextStyle(fontSize: 16))),
+      ),
     );
   }
 }

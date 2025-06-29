@@ -12,30 +12,26 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
   showFlutterNotification(message);
-
   print('Handling a background message ${message.messageId}');
 }
 
-/// Create a [AndroidNotificationChannel] for heads up notifications
-late AndroidNotificationChannel channel;
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
+late AndroidNotificationChannel channel;
 bool isFlutterLocalNotificationsInitialized = false;
 
 Future<void> setupFlutterNotifications() async {
-  if (isFlutterLocalNotificationsInitialized) {
-    return;
-  }
+  if (isFlutterLocalNotificationsInitialized) return;
+
   channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    description:
-    'This channel is used for important notifications.', // description
+    description: 'This channel is used for important notifications.',
     importance: Importance.high,
   );
 
-  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-
+  // Create the Android notification channel
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>()
@@ -46,12 +42,14 @@ Future<void> setupFlutterNotifications() async {
     badge: true,
     sound: true,
   );
+
   isFlutterLocalNotificationsInitialized = true;
 }
 
 void showFlutterNotification(RemoteMessage message) {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
+
   if (notification != null && android != null && !kIsWeb) {
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
@@ -62,8 +60,6 @@ void showFlutterNotification(RemoteMessage message) {
           channel.id,
           channel.name,
           channelDescription: channel.description,
-          // TODO add a proper drawable resource to android, for now using
-          //      one that already exists in example app.
           icon: 'launch_background',
         ),
       ),
@@ -71,15 +67,51 @@ void showFlutterNotification(RemoteMessage message) {
   }
 }
 
-/// Initialize the [FlutterLocalNotificationsPlugin] package.
-late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
-void main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await setupFlutterNotifications();
+
+  FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null) {
+    print('App opened from terminated state by notification');
+    // You can navigate to a specific screen here if needed
+  }
+
+  await requestNotificationPermissions();
+
+  await getFcmToken();
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+    print("Refreshed FCM Token: $newToken");
+  });
+
   runApp(const MyApp());
+}
+
+Future<void> requestNotificationPermissions() async {
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  print('User granted permission: ${settings.authorizationStatus}');
+}
+
+Future<void> getFcmToken() async {
+  String? token = await FirebaseMessaging.instance.getToken();
+  print("FCM Token: $token");
 }
 
 class MyApp extends StatelessWidget {
