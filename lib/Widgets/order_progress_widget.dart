@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 enum OrderStatus { pending, confirmed, shipped, delivered }
@@ -57,15 +56,13 @@ class _OrderProgressWidgetState extends State<OrderProgressWidget> {
     return TimelineTile(
       isFirst: step == OrderStatus.pending,
       isLast: isLast,
-      indicatorStyle: IndicatorStyle(width: 4.5.w, color: _getColor(step)),
-      beforeLineStyle: LineStyle(color: beforeLineColor, thickness: 0.5.h),
-      afterLineStyle: LineStyle(color: afterLineColor, thickness: 0.5.h),
+      indicatorStyle: IndicatorStyle(width: 20, color: _getColor(step)),
+      beforeLineStyle: LineStyle(color: beforeLineColor, thickness: 3),
+      afterLineStyle: LineStyle(color: afterLineColor, thickness: 3),
       endChild: Container(
-        height: 9.h,
+        height: 70,
         color: Colors.white,
-        child: Center(
-          child: Text(label, style: TextStyle(fontSize: 12.sp)),
-        ),
+        child: Center(child: Text(label, style: const TextStyle(fontSize: 16))),
       ),
     );
   }

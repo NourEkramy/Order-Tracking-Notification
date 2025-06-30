@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class OrderCardWidget extends StatelessWidget {
   const OrderCardWidget({super.key});
@@ -8,10 +7,10 @@ class OrderCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.grey[200],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.w)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 3,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.w),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16,),
         child: Column(
           children: const [
             _DetailRow(label: 'Estimated Time', value: '30 minutes'),
@@ -33,14 +32,11 @@ class _DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 0.7.h),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10.5.sp),
-          ),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           Text(value),
         ],
       ),

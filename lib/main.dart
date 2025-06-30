@@ -12,7 +12,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
   showFlutterNotification(message);
-  print('Handling a background message ${message.messageId}');
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -81,8 +80,6 @@ Future<void> main() async {
 
   RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
-    print('App opened from terminated state by notification');
-    // You can navigate to a specific screen here if needed
   }
 
   await requestNotificationPermissions();
@@ -90,7 +87,6 @@ Future<void> main() async {
   await getFcmToken();
 
   FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-    print("Refreshed FCM Token: $newToken");
   });
 
   runApp(const MyApp());
@@ -106,12 +102,10 @@ Future<void> requestNotificationPermissions() async {
     provisional: false,
     sound: true,
   );
-  print('User granted permission: ${settings.authorizationStatus}');
 }
 
 Future<void> getFcmToken() async {
   String? token = await FirebaseMessaging.instance.getToken();
-  print("FCM Token: $token");
 }
 
 class MyApp extends StatelessWidget {
