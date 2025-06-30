@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:order_tracker/order_tracker.dart';
+import 'package:sizer/sizer.dart';
 import '../Widgets/order_card_widget.dart';
 import '../Widgets/order_progress_widget.dart';
 import '../main.dart';
@@ -45,7 +46,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
       appBar: AppBar(
         title: Text(
           'Track Order',
-          style: TextStyle(color: Colors.white, fontSize: 30),
+          style: TextStyle(color: Colors.white, fontSize: 18.sp),
         ),
         backgroundColor: Color(0xec007aff),
         shape: RoundedRectangleBorder(
@@ -60,16 +61,16 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
             const OrderCardWidget(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 12),
+              margin: EdgeInsets.symmetric(vertical: 1.2.h),
               child: Image.asset(
                 'assets/images/take-away-concept-illustration.png',
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+            SizedBox(height: MediaQuery.of(context).size.height * 2.5.h),
             OrderProgressWidget(status: _status),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+            SizedBox(height: MediaQuery.of(context).size.height * 2.5.h),
             Wrap(
-              spacing: 8,
+              spacing: 2.w,
               children: OrderStatus.values.map((s) {
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -77,12 +78,15 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 1..h,
+                    ),
                   ),
                   onPressed: () => _updateStatus(s),
                   child: Text(
                     s.name.toUpperCase(),
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 11.sp),
                   ),
                 );
               }).toList(),
